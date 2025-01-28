@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee and Shift Configuration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.x/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Employee and Shift Configuration</h1>
+
+        <!-- Display Employee Data -->
+        <h2>Employees</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>No. of Hours Worked</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.e_id }}</td>
+                    <td>{{ employee.e_name }}</td>
+                    <td>{{ employee.no_of_hours_worked }}</td>
+                    <td>{{ employee.designation }}</td>
+                    <td>{{ employee.e_email }}</td>
+                    <td>{{ employee.e_priority }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display Shift Data -->
+        <h2>Shifts</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Day</th>
+                    <th>Timing</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shift in shifts %}
+                <tr>
+                    <td>{{ shift.shift_id }}</td>
+                    <td>{{ shift.shift_day }}</td>
+                    <td>{{ shift.shift_timing }}</td>
+                    <td>{{ shift.shift_priority }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.x/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
