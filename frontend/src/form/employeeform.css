@@ -1,0 +1,52 @@
+.form-container {
+    max-width: 1100px; /* Increased width */
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+.department-container {
+    max-height: 300px; /* Set a max height */
+    overflow-y: auto; /* Make it scrollable */
+    padding-right: 10px;
+}
+
+.form-title {
+    color: #333;
+    font-weight: bold;
+}
+
+.input-field {
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.department-form {
+    background: #ffffff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.generate-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.swap-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.remove-btn {
+    font-size: 25px;
+    border: none;
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+}
