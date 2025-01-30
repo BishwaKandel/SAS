@@ -20,9 +20,11 @@ from django.contrib import admin
 from django.urls import path, include
 from login.views import HRManagerAPI
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', HRManagerAPI.as_view()),
     path('configure/', include('configure.urls')),
     path('swap/', include('swap.urls')),
+    path('sendmail/', include('mail.urls')),
 ]
