@@ -37,6 +37,7 @@ def get_employee_count_by_designation():
 
 
 
+
 def assign_shifts_randomly(designation_counts, employees, shifts):
     # Initialize the schedule dictionary to group shifts by days
     schedule = {shift.shift_day: [] for shift in shifts}
@@ -101,12 +102,12 @@ def export_schedule_to_csv(schedule, employees, output_file):
         formatted_schedule["Designation"].append(employee.designation)  # Accessing designation using dot notation
         for day in schedule.keys():
             # Find the assigned shift for this employee and day
-            assigned_shift = next(
-                (entry["shift_id"] for entry in schedule[day]
+            assigned_shift_timing = next(
+                (entry["shift_timing"] for entry in schedule[day]
                  if entry["e_id"] == employee.e_id),
                 "Leave"
             )
-            formatted_schedule[day].append(assigned_shift)
+            formatted_schedule[day].append(assigned_shift_timing)
 
     # Convert to DataFrame and export to CSV
     df_formatted_schedule = pd.DataFrame(formatted_schedule)
@@ -114,6 +115,5 @@ def export_schedule_to_csv(schedule, employees, output_file):
     print(f"Formatted schedule exported to {output_file}")
 
 # Use the export function
-output_file = "formatted_shift_scheduletest.csv" 
-
+output_file = "formatted_shift_scheduletest1.csv"
 

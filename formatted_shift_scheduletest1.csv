@@ -1,0 +1,121 @@
+Employee ID,Designation,Day1,Day2,Day3,Day4,Day5,Day6,Day7
+1,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+2,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+3,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+4,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+5,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+6,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+7,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+8,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+9,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+10,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+11,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+12,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+13,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+14,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+15,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+16,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+17,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+18,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+19,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+20,Cashier,M1,M1,M1,Leave,Leave,Leave,Leave
+21,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+22,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+23,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+24,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+25,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+26,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+27,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+28,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+29,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+30,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+31,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+32,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+33,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+34,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+35,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+36,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+37,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+38,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+39,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+40,Supervisor,M1,M1,M1,Leave,Leave,Leave,Leave
+41,Inventory Manager,D2,M1,M1,Leave,Leave,Leave,Leave
+42,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+43,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+44,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+45,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+46,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+47,Inventory Manager,D2,M1,D2,Leave,Leave,Leave,Leave
+48,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+49,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+50,Inventory Manager,M1,D2,M1,Leave,Leave,Leave,Leave
+51,Inventory Manager,M1,M1,D2,Leave,Leave,Leave,Leave
+52,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+53,Inventory Manager,M1,D2,Leave,Leave,Leave,Leave,Leave
+54,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+55,Inventory Manager,D2,M1,Leave,Leave,Leave,Leave,Leave
+56,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+57,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+58,Inventory Manager,M1,M1,M1,Leave,Leave,Leave,Leave
+59,Inventory Manager,D2,D2,M1,Leave,Leave,Leave,Leave
+60,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+61,Inventory Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+62,Inventory Manager,M1,M1,D2,Leave,Leave,Leave,Leave
+63,Inventory Manager,M1,D2,D2,Leave,Leave,Leave,Leave
+64,Inventory Manager,M1,D2,M1,Leave,Leave,Leave,Leave
+65,Inventory Manager,D2,M1,M1,Leave,Leave,Leave,Leave
+66,Customer Help,M1,D2,M1,M1,Leave,Leave,Leave
+67,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+68,Customer Help,D2,N1,D2,M1,M1,Leave,Leave
+69,Customer Help,M1,M1,M1,Leave,Leave,Leave,Leave
+70,Customer Help,M1,D2,M1,M1,M1,Leave,Leave
+71,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+72,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+73,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+74,Customer Help,M1,M1,M1,Leave,Leave,Leave,Leave
+75,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+76,Customer Help,D2,D2,D2,D2,Leave,Leave,Leave
+77,Customer Help,M1,M1,M1,Leave,Leave,Leave,Leave
+78,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+79,Customer Help,D2,M1,M1,M1,Leave,Leave,Leave
+80,Customer Help,D2,M1,D2,M1,Leave,Leave,Leave
+81,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+82,Customer Help,D2,D2,M1,M1,Leave,Leave,Leave
+83,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+84,Customer Help,M1,M1,E1,M1,Leave,Leave,Leave
+85,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+86,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+87,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+88,Customer Help,M1,M1,D2,M1,Leave,Leave,Leave
+89,Customer Help,M1,M1,M1,M1,Leave,Leave,Leave
+90,Customer Help,M1,M1,M1,Leave,Leave,Leave,Leave
+91,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+92,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+93,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+94,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+95,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+96,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+97,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+98,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+99,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+100,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+101,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+102,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+103,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+104,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+105,Cleaning Staff,M1,M1,Leave,Leave,Leave,Leave,Leave
+106,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+107,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+108,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+109,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+110,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+111,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+112,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+113,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+114,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+115,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+116,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+117,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+118,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+119,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave
+120,Manager,M1,M1,Leave,Leave,Leave,Leave,Leave

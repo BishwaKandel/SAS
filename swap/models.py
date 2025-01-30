@@ -6,4 +6,4 @@ class Shift(models.Model):
     shift_timing = models.CharField(max_length=50)  # CharField with max length 50
     shift_day = models.CharField(max_length=50)  # CharField with max length 50
     shift_priority = models.IntegerField() 
-# Create your models here.
+
