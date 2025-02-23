@@ -25,4 +25,5 @@ urlpatterns = [
     path('login/', HRManagerAPI.as_view()),
     path('configure/', include('configure.urls')),
     path('swap/', include('swap.urls')),
+    path('mail/', include('mail.urls')),
 ]

@@ -2,7 +2,7 @@ import os
 import django
 import sys
 
-sys.path.append('C:\\Users\\ASUS\\Desktop\\SAS')
+sys.path.append('C:\\Users\\ASUS\\Desktop\\SASnew')
 
 # Set the DJANGO_SETTINGS_MODULE environment variable to your settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')

@@ -1,5 +1,8 @@
 import os
 import django
+import sys
+
+sys.path.append('C:\\Users\\ASUS\\Desktop\\SASnew')
 
 # Set the DJANGO_SETTINGS_MODULE environment variable to your settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -8,49 +11,38 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 # Now you can import your models and interact with the database
-from swap.models import Shift
+from swap.models import Shift , ShiftSchedule
 
 
+# Step 1: Create shifts if they don't exist
 
-# Define the data as a list of tuples
-shift_data = [
-    (3, 'M1', 'Day1', 1),
-    (3, 'D2', 'Day1', 2),
-    (3, 'D2', 'Day1', 3),
-    (3, 'E1', 'Day1', 1),
-    (3, 'N1', 'Day1', 1),
-    (3, 'M1', 'Day2', 1),
-    (3, 'D2', 'Day2', 2),
-    (3, 'D2', 'Day2', 3),
-    (3, 'E1', 'Day2', 1),
-    (3, 'N1', 'Day2', 1),
-    (3, 'M1', 'Day3', 1),
-    (3, 'D2', 'Day3', 2),
-    (3, 'D2', 'Day3', 3),
-    (3, 'E1', 'Day3', 1),
-    (3, 'N1', 'Day3', 1),
-    (3, 'M1', 'Day4', 1),
-    (3, 'D2', 'Day4', 2),
-    (3, 'D2', 'Day4', 3),
-    (3, 'E1', 'Day4', 1),
-    (3, 'N1', 'Day4', 1),
-    (3, 'M1', 'Day5', 1),
-    (3, 'D2', 'Day5', 2),
-    (3, 'D2', 'Day5', 3),
-    (3, 'E1', 'Day5', 1),
-    (3, 'N1', 'Day5', 1),
-    (3, 'M1', 'Day6', 1),
-    (3, 'D2', 'Day6', 2),
-    (3, 'D2', 'Day6', 3),
-    (3, 'E1', 'Day6', 1),
-    (3, 'N1', 'Day6', 1),
-    (3, 'M1', 'Day7', 1),
-    (3, 'D2', 'Day7', 2),
-    (3, 'D2', 'Day7', 3),
-    (3, 'E1', 'Day7', 1),
-    (3, 'N1', 'Day7', 1),
-]
+shifts = {
+    f"Day{i}": [
+        {"shift_id": "Morning", "shift_duration": 4, "shift_timing": "7am to 11am"},
+        {"shift_id": "Day", "shift_duration": 4, "shift_timing": "11am to 3pm"},
+        {"shift_id": "Evening", "shift_duration": 4, "shift_timing": "3pm to 7pm"},
+        {"shift_id": "Night", "shift_duration": 4, "shift_timing": "7pm to 11pm"}
+    ]
+    for i in range(1, 8)  # Generates Day1 to Day7
+}
 
-# Insert the data into the Shift model
-for shift in shift_data:
-    Shift.objects.create(shift_duration=shift[0], shift_timing=shift[1], shift_day=shift[2], shift_priority=shift[3])
+# Create Shift objects if they don’t exist
+for shift_list in shifts.values():
+    for shift_data in shift_list:
+        shift, created = Shift.objects.get_or_create(
+            shift_id=shift_data["shift_id"],
+            defaults={
+                "shift_duration": shift_data["shift_duration"],
+                "shift_timing": shift_data["shift_timing"]
+            }
+        )
+
+# Create ShiftSchedule objects
+for day, shift_list in shifts.items():
+    for shift_data in shift_list:
+        shift = Shift.objects.get(shift_id=shift_data["shift_id"])  # Get the existing Shift object
+        ShiftSchedule.objects.get_or_create(
+            day=day,
+            shift=shift
+        )
+
