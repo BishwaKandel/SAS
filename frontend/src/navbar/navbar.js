@@ -34,22 +34,46 @@ const Navbar = () => {
 				}}
 			>
 				<Menu.Item key="/">
-					<Link to="/">Home</Link>
+					<Link to="/" style={{ textDecoration: "none" }}>
+						Home
+					</Link>
 				</Menu.Item>
 				<Menu.Item key="/employeeform">
-					<Link to="/employeeform">Employee Form</Link>
+					<Link
+						to="/employeeform"
+						style={{ textDecoration: "none" }}
+					>
+						Employee Form
+					</Link>
 				</Menu.Item>
 				<Menu.Item key="/shiftswap">
-					<Link to="/shiftswap">Swap</Link>
+					<Link
+						to="/shiftswap"
+						style={{ textDecoration: "none" }}
+					>
+						Swap
+					</Link>
 				</Menu.Item>
-				<Menu.Item key="/addemployeerecorde">
-					<Link to="/addemployeerecords">Add Employee</Link>
+				<Menu.Item key="/addemployeerecords">
+					<Link
+						to="/addemployeerecords"
+						style={{ textDecoration: "none" }}
+					>
+						Add Employee
+					</Link>
 				</Menu.Item>
+				<div style={{ flexGrow: 1 }}></div>{" "}
+				{/* Pushes Log Out to the left with space */}
 				<Menu.Item
 					key="/logout"
-					style={{ marginLeft: "auto" }}
+					style={{ marginRight: "10px" }}
 				>
-					Log Out
+					<Link
+						to="/logout"
+						style={{ textDecoration: "none" }}
+					>
+						Log Out
+					</Link>
 				</Menu.Item>
 			</Menu>
 		</Header>
