@@ -21,6 +21,7 @@ class HRManagerCustom(models.Manager):
 
 class HRManager(models.Model):
     id = models.AutoField(primary_key=True)
+    # name = models.CharField(max_length=50)
     ManagerID = models.CharField(
         max_length=4,
         validators=[RegexValidator(r'^\d{4}$', 'Manager ID must be exactly 4 digits')],

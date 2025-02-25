@@ -5,6 +5,6 @@ def send_email_view(request):
     send_mail_with_attachment(
         subject="Shift Allocated Table",
         message="Please find the allocated shifts attached.",
-        file_path = "C:\\django\\SAS-master\\formatted_shift_scheduletest1.csv",
+        file_path = "C:\\django\\SAS\\formatted_shift_scheduletest1.csv",
     )
     return HttpResponse("Email sent successfully!")
