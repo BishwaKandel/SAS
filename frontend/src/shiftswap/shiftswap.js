@@ -53,7 +53,7 @@ const ShiftSwap = () => {
 			style={{
 				display: "flex",
 				justifyContent: "center",
-				alignItems: "center",
+				alignItems: "flex-start",
 				height: "100vh",
 				background: "#f0f2f5",
 				padding: "20px",
