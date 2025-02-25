@@ -1,123 +1,274 @@
 import React, { useState } from "react";
-import "./shiftswap.css"; // Import the CSS file
+import {
+	Card,
+	Form,
+	Input,
+	Button,
+	DatePicker,
+	Typography,
+	Row,
+	Col,
+	message,
+} from "antd";
+import {
+	SwapOutlined,
+	UserOutlined,
+	IdcardOutlined,
+	CalendarOutlined,
+} from "@ant-design/icons";
+import dayjs from "dayjs";
+
+const { Title, Text } = Typography;
 
 const ShiftSwap = () => {
-  const [employee1Id, setEmployee1Id] = useState("");
-  const [employee2Id, setEmployee2Id] = useState("");
-  const [shiftId1, setShiftId1] = useState("");
-  const [shiftId2, setShiftId2] = useState("");
-  const [shiftDay1, setShiftDay1] = useState("");
-  const [shiftDay2, setShiftDay2] = useState("");
-  const [swapAvailable, setSwapAvailable] = useState(false);
-  const [resultMessage, setResultMessage] = useState("");
+	const [form] = Form.useForm();
+	const [swapAvailable, setSwapAvailable] = useState(false);
+	const [resultMessage, setResultMessage] = useState("");
 
-  const checkSwap = () => {
-    if (employee1Id && employee2Id && shiftId1 !== shiftId2) {
-      setResultMessage("Valid for Swap");
-      setSwapAvailable(true);
-    } else {
-      setResultMessage("Not Valid for Swap");
-      setSwapAvailable(false);
-    }
-  };
+	const checkSwap = () => {
+		const values = form.getFieldsValue();
+		if (
+			values.employee1Id &&
+			values.employee2Id &&
+			values.shiftId1 !== values.shiftId2
+		) {
+			setResultMessage("Valid for Swap");
+			setSwapAvailable(true);
+			message.success("Shift swap is valid.");
+		} else {
+			setResultMessage("Not Valid for Swap");
+			setSwapAvailable(false);
+			message.error("Shift swap is not valid.");
+		}
+	};
 
-  const swapShifts = () => {
-    alert("Shifts swapped successfully!");
-    // Logic to update backend or database can be added here.
-  };
+	const swapShifts = () => {
+		message.success("Shifts swapped successfully!");
+		form.resetFields();
+		setSwapAvailable(false);
+	};
 
-  return (
-    <div className="shift-swap-container">
-      <h1 className="text-center">Shift Swap Portal</h1>
-      <form className="shift-swap-form">
-        <div className="form-group">
-          <label htmlFor="employee1Id">Employee 1 ID</label>
-          <input
-            type="text"
-            id="employee1Id"
-            value={employee1Id}
-            onChange={(e) => setEmployee1Id(e.target.value)}
-            placeholder="Enter Employee 1 ID"
-          />
-        </div>
+	return (
+		<div
+			style={{
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				height: "100vh",
+				background: "#f0f2f5",
+				padding: "20px",
+			}}
+		>
+			<Card
+				style={{
+					width: 600,
+					padding: "20px",
+					borderRadius: "10px",
+					boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+					background: "#fff",
+				}}
+			>
+				<Title
+					level={3}
+					style={{
+						textAlign: "center",
+						marginBottom: "15px",
+					}}
+				>
+					🔄 Shift Exchange Portal
+				</Title>
+				<Text
+					type="secondary"
+					style={{
+						display: "block",
+						textAlign: "center",
+						marginBottom: "20px",
+					}}
+				>
+					Facilitate smooth shift transitions between team
+					members
+				</Text>
 
-        <div className="form-group">
-          <label htmlFor="shiftDay1">Shift Day of Employee 1</label>
-          <input
-            type="date"
-            id="shiftDay1"
-            value={shiftDay1}
-            onChange={(e) => setShiftDay1(e.target.value)}
-          />
-        </div>
+				<Form form={form} layout="vertical">
+					<Row gutter={16}>
+						{/* Employee 1 Section */}
+						<Col span={11}>
+							<Card title="👤 Employee 1" bordered>
+								<Form.Item
+									name="employee1Id"
+									label="Staff ID"
+									rules={[
+										{
+											required: true,
+											message: "Please enter Staff ID!",
+										},
+									]}
+								>
+									<Input
+										prefix={<IdcardOutlined />}
+										placeholder="E-1234"
+									/>
+								</Form.Item>
 
-        <div className="form-group">
-          <label htmlFor="shiftId1">Employee 1 Shift ID</label>
-          <input
-            type="text"
-            id="shiftId1"
-            value={shiftId1}
-            onChange={(e) => setShiftId1(e.target.value)}
-            placeholder="Enter Employee 1 Shift ID"
-          />
-        </div>
+								<Form.Item
+									name="shiftDay1"
+									label="Shift Date"
+									rules={[
+										{
+											required: true,
+											message: "Please select shift date!",
+										},
+									]}
+								>
+									<DatePicker
+										format="YYYY-MM-DD"
+										style={{ width: "100%" }}
+									/>
+								</Form.Item>
 
-        <div className="form-group">
-          <label htmlFor="employee2Id">Employee 2 ID</label>
-          <input
-            type="text"
-            id="employee2Id"
-            value={employee2Id}
-            onChange={(e) => setEmployee2Id(e.target.value)}
-            placeholder="Enter Employee 2 ID"
-          />
-        </div>
+								<Form.Item
+									name="shiftId1"
+									label="Shift ID"
+									rules={[
+										{
+											required: true,
+											message: "Please enter Shift ID!",
+										},
+									]}
+								>
+									<Input
+										prefix={<CalendarOutlined />}
+										placeholder="SH-5678"
+									/>
+								</Form.Item>
+							</Card>
+						</Col>
 
-        <div className="form-group">
-          <label htmlFor="shiftDay2">Shift Day of Employee 2</label>
-          <input
-            type="date"
-            id="shiftDay2"
-            value={shiftDay2}
-            onChange={(e) => setShiftDay2(e.target.value)}
-          />
-        </div>
+						{/* Swap Icon */}
+						<Col
+							span={2}
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<SwapOutlined
+								style={{
+									fontSize: "30px",
+									color: "#1890ff",
+								}}
+							/>
+						</Col>
 
-        <div className="form-group">
-          <label htmlFor="shiftId2">Employee 2 Shift ID</label>
-          <input
-            type="text"
-            id="shiftId2"
-            value={shiftId2}
-            onChange={(e) => setShiftId2(e.target.value)}
-            placeholder="Enter Employee 2 Shift ID"
-          />
-        </div>
+						{/* Employee 2 Section */}
+						<Col span={11}>
+							<Card title="👤 Employee 2" bordered>
+								<Form.Item
+									name="employee2Id"
+									label="Staff ID"
+									rules={[
+										{
+											required: true,
+											message: "Please enter Staff ID!",
+										},
+									]}
+								>
+									<Input
+										prefix={<IdcardOutlined />}
+										placeholder="E-5678"
+									/>
+								</Form.Item>
 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={checkSwap}
-        >
-          Check Swap Availability
-        </button>
+								<Form.Item
+									name="shiftDay2"
+									label="Shift Date"
+									rules={[
+										{
+											required: true,
+											message: "Please select shift date!",
+										},
+									]}
+								>
+									<DatePicker
+										format="YYYY-MM-DD"
+										style={{ width: "100%" }}
+									/>
+								</Form.Item>
 
-        <div className="result-message">
-          <p className={swapAvailable ? "valid" : "invalid"}>{resultMessage}</p>
-        </div>
+								<Form.Item
+									name="shiftId2"
+									label="Shift ID"
+									rules={[
+										{
+											required: true,
+											message: "Please enter Shift ID!",
+										},
+									]}
+								>
+									<Input
+										prefix={<CalendarOutlined />}
+										placeholder="SH-1234"
+									/>
+								</Form.Item>
+							</Card>
+						</Col>
+					</Row>
 
-        {swapAvailable && (
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={swapShifts}
-          >
-            Swap Shifts
-          </button>
-        )}
-      </form>
-    </div>
-  );
+					<div
+						style={{
+							textAlign: "center",
+							marginTop: "20px",
+						}}
+					>
+						<Button
+							type="primary"
+							icon={<UserOutlined />}
+							onClick={checkSwap}
+						>
+							Verify Swap Eligibility
+						</Button>
+					</div>
+
+					{resultMessage && (
+						<div
+							style={{
+								textAlign: "center",
+								marginTop: "15px",
+								color: swapAvailable
+									? "#52c41a"
+									: "#ff4d4f",
+								fontSize: "16px",
+								fontWeight: "bold",
+							}}
+						>
+							{swapAvailable
+								? `✅ ${resultMessage}`
+								: `⚠️ ${resultMessage}`}
+						</div>
+					)}
+
+					{swapAvailable && (
+						<div
+							style={{
+								textAlign: "center",
+								marginTop: "20px",
+							}}
+						>
+							<Button
+								type="primary"
+								danger
+								icon={<SwapOutlined />}
+								onClick={swapShifts}
+							>
+								Confirm Shift Exchange
+							</Button>
+						</div>
+					)}
+				</Form>
+			</Card>
+		</div>
+	);
 };
 
 export default ShiftSwap;

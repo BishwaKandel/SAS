@@ -1,73 +1,176 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import Axios for API calls
-import "./login.css";
+import axios from "axios";
+import {
+	Form,
+	Input,
+	Button,
+	Checkbox,
+	Card,
+	Typography,
+	Space,
+} from "antd";
+import {
+	LockOutlined,
+	UserOutlined,
+	GoogleOutlined,
+} from "@ant-design/icons";
+
+const { Title, Text } = Typography;
 
 const Login = () => {
-    const [managerId, setManagerId] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(""); // Error state
-    const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
+	const handleLogin = async (values) => {
+		setLoading(true);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setError(""); // Clear previous errors
+		// Temporary Credentials
+		const tempManagerID = "1234";
+		const tempPassword = "123456";
 
-        try {
-            const response = await axios.post("http://127.0.0.1:8000/login/", {
-                ManagerID: managerId,
-                password: password,
-            });
+		// Check if user enters the temporary credentials
+		if (
+			values.managerID === tempManagerID &&
+			values.password === tempPassword
+		) {
+			alert("Logged in using temporary credentials!");
+			navigate("/EmployeeForm");
+			setLoading(false);
+			return;
+		}
 
-            if (response.data.status) {
-                console.log("Login successful:", response.data);
-                navigate("/EmployeeForm"); // Redirect on success
-            } else {
-                setError("Invalid Manager ID or Password");
-            }
-        } catch (err) {
-            if (err.response && err.response.data) {
-                // Customize the error message based on backend response
-                setError(err.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                setError("Network Error: Unable to reach the server.");
-            }
-        }
-    };
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:8000/login/",
+				{
+					ManagerID: values.managerID,
+					password: values.password,
+				}
+			);
 
-    return (
-        <div className="login-container">
-            <div className="login-box">
-                <h2>Login</h2>
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="text"
-                        placeholder="Manager ID (4 digits)"
-                        value={managerId}
-                        onChange={(e) => setManagerId(e.target.value)}
-                        required
-                        maxLength="4"
-                        minLength="4"
-                        pattern="\d{4}"
-                        className="login-input"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="login-input"
-                    />
-                    <button type="submit" className="login-button">Login</button>
-                </form>
-                {error && <p className="error-message">{error}</p>} {/* Display errors */}
-                <p>
-                    Don't have an account? <a href="/signup" className="signup-link">Sign up</a>
-                </p>
-            </div>
-        </div>
-    );
+			if (response.data.status) {
+				navigate("/EmployeeForm");
+			} else {
+				alert("Invalid Manager ID or Password");
+			}
+		} catch (err) {
+			alert("Network Error: Unable to reach the server.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div
+			style={{
+				position: "fixed",
+				top: 0,
+				left: 0,
+				width: "100vw",
+				height: "100vh",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				background: "#F8F9FC",
+			}}
+		>
+			<Card
+				style={{
+					width: 400,
+					padding: "30px",
+					textAlign: "center",
+					borderRadius: "10px",
+					boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)", // Darker shadow only around the card
+					background: "#fff",
+				}}
+			>
+				<Title level={3} style={{ marginBottom: "10px" }}>
+					Welcome back
+				</Title>
+				<Text type="secondary">
+					Please enter your login details
+				</Text>
+
+				<Form
+					name="login-form"
+					onFinish={handleLogin}
+					layout="vertical"
+					style={{ marginTop: "20px" }}
+				>
+					<Form.Item
+						name="managerID"
+						rules={[
+							{
+								required: true,
+								message: "Please enter your Manager ID!",
+							},
+							{
+								pattern: /^[0-9]{4}$/,
+								message:
+									"Manager ID must be exactly 4 digits!",
+							},
+						]}
+					>
+						<Input
+							prefix={<UserOutlined />}
+							placeholder="Enter 4-digit Manager ID"
+							maxLength={4}
+						/>
+					</Form.Item>
+
+					<Form.Item
+						name="password"
+						rules={[
+							{
+								required: true,
+								message: "Please enter your password!",
+							},
+						]}
+					>
+						<Input.Password
+							prefix={<LockOutlined />}
+							placeholder="Password"
+						/>
+					</Form.Item>
+
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							marginBottom: "15px",
+						}}
+					>
+						<Checkbox>Remember for 30 days</Checkbox>
+						<a href="/forgot-password">Forgot password</a>
+					</div>
+
+					<Form.Item>
+						<Button
+							type="primary"
+							htmlType="submit"
+							loading={loading}
+							block
+							style={{ height: "40px", fontSize: "16px" }}
+						>
+							Sign in
+						</Button>
+					</Form.Item>
+				</Form>
+
+				<Space
+					direction="vertical"
+					size="small"
+					style={{ marginTop: "15px" }}
+				>
+					<Text type="secondary">
+						Don't have an account?{" "}
+						<a href="/signup">Sign up</a>
+					</Text>
+				</Space>
+			</Card>
+		</div>
+	);
 };
 
 export default Login;
