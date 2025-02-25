@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Typography, InputNumber, Row, Col } from "antd";
+import { Form, Input, Button, Typography, InputNumber, Row, Col, Card } from "antd";
 import { UserOutlined, MailOutlined, IdcardOutlined, ClockCircleOutlined, SolutionOutlined, StarOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -22,9 +22,13 @@ const AddEmployeeRecord = () => {
         console.log("Employee Record Submitted:", employee);
     };
 
+    const handleAddAnother = () => {
+        setEmployee({ e_id: "", e_name: "", no_of_hours_worked: "", designation: "", e_gmail: "", e_priority: "" });
+    };
+
     return (
         <div style={{ width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
-            <div style={{ width: "90%" }}>
+            <Card style={{ width: "90%", padding: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
                 <Title level={2} style={{ textAlign: "center", marginBottom: "20px" }}>Add Employee Record</Title>
                 <Form layout="horizontal" onFinish={handleSubmit}>
                     <Row gutter={16}>
@@ -61,11 +65,16 @@ const AddEmployeeRecord = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row justify="center">
-                        <Button type="primary" htmlType="submit" size="large">Add Employee</Button>
+                    <Row justify="center" gutter={16}>
+                        <Col>
+                            <Button type="primary" htmlType="submit" size="large">Add Employee</Button>
+                        </Col>
+                        <Col>
+                            <Button type="default" size="large" onClick={handleAddAnother}>Add Another Employee</Button>
+                        </Col>
                     </Row>
                 </Form>
-            </div>
+            </Card>
         </div>
     );
 };
