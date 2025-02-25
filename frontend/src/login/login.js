@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import {
 	Form,
 	Input,
@@ -28,13 +29,13 @@ const Login = () => {
 		const tempManagerID = "1234";
 		const tempPassword = "123456";
 
-		// Check if user enters the temporary credentials
 		if (
 			values.managerID === tempManagerID &&
 			values.password === tempPassword
 		) {
 			alert("Logged in using temporary credentials!");
-			navigate("/EmployeeForm");
+			localStorage.setItem("authToken", "tempToken"); // Store fake auth token
+			navigate("/home"); // Ensure lowercase
 			setLoading(false);
 			return;
 		}
@@ -48,8 +49,14 @@ const Login = () => {
 				}
 			);
 
-			if (response.data.status) {
-				navigate("/EmployeeForm");
+			console.log(response.data); // Debug API response
+
+			if (response.data.token) {
+				localStorage.setItem(
+					"authToken",
+					response.data.token
+				);
+				navigate("/home"); // Ensure lowercase
 			} else {
 				alert("Invalid Manager ID or Password");
 			}
