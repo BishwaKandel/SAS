@@ -1,10 +1,23 @@
-from rest_framework.views import APIView
+from django.shortcuts import render
+from rest_framework import generics, status
+from .models import *
+from .serializers import *
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
-from .models import HRManager
-from .serializers import HRManagerSerializer
+from rest_framework.permissions import IsAuthenticated
 
-class HRManagerAPI(APIView):
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = HRManager.objects.all()
+    serializer_class = RegisterSerializer   
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer   
+
     def get(self, request):
         # Fetch all HRManagers
         query_set = HRManager.objects.all()
@@ -14,34 +27,56 @@ class HRManagerAPI(APIView):
             'status': True
         })
 
-    def post(self, request):
-        """
-        Authenticate the HR Manager using ManagerID and password.
-        """
-        manager_id = request.data.get("ManagerID")
-        password = request.data.get("password")
 
+    def post(self, request, *args, **kwargs):
+        ManagerID = request.data.get('ManagerID')
+        password = request.data.get('password')
+        user = authenticate(ManagerID=ManagerID, password=password)
+        
         try:
-            manager = HRManager.objects.get(ManagerID=manager_id)
-
-            # Debugging: Print the hashed password and the entered password
-            print("Stored Hashed Password:", manager.password)
-            print("Entered Password:", password)
-            
-            # Check if the provided password matches the stored hash
-            if check_password(password, manager.password):
-                return Response({
-                    "message": "Login successful",
-                    "status": True
-                }, status=200)
-            else:
-                return Response({
-                    "message": "Invalid Manager ID or Password",
-                    "status": False
-                }, status=401)  # 401 Unauthorized
-
+            user = HRManager.objects.get(ManagerID= ManagerID)
         except HRManager.DoesNotExist:
             return Response({
-                "message": "Manager ID not found",
-                "status": False
-            }, status=404)  # 404 Not Found, more specific error
+                'message': 'Invalid email or password',
+                'status': False
+            }, status=401)
+
+        if check_password(password, user.password):  # ✅ Manually check hashed password
+            refresh = RefreshToken.for_user(user)
+            user_serializer = HRManagerSerializer(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user': user_serializer.data,
+                'status': True
+            })
+        else:
+            return Response({
+                'message': 'Invalid email or password',
+                'status': False
+            }, status=401)
+
+ 
+        
+
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]  # Requires authentication
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Password changed successfully!"}, status=status.HTTP_200_OK)
+
+
+
+class ResetPasswordView(generics.GenericAPIView):
+    serializer_class = ResetPasswordSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"message": "Password reset successfully. You can now log in with your new password."}, status=status.HTTP_200_OK)

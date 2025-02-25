@@ -18,12 +18,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib import admin
 from django.urls import path, include
-from login.views import HRManagerAPI
+from login.views import *
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', HRManagerAPI.as_view()),
     path('configure/', include('configure.urls')),
     path('swap/', include('swap.urls')),
-    path('mail/', include('mail.urls')),
+    path('sendmail/', include('mail.urls')),
+    path('api/auth/register', RegisterView.as_view()),
+    path('api/auth/login', LoginView.as_view()),
+    path('change-password/', ChangePasswordView.as_view()),
+    path('reset-password/', ResetPasswordView.as_view()),
 ]
