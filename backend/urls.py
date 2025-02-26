@@ -19,6 +19,8 @@ from django.urls import path, include
 from django.contrib import admin
 from django.urls import path, include
 from login.views import *
+from configure.views import *
+
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -28,11 +30,14 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('configure/', include('configure.urls')),
-    path('swap/', include('swap.urls')),
-    path('sendmail/', include('mail.urls')),
     path('api/auth/register', RegisterView.as_view()),
     path('api/auth/login', LoginView.as_view()),
     path('change-password/', ChangePasswordView.as_view()),
     path('reset-password/', ResetPasswordView.as_view()),
+    path('configure/', configure_view),
+    # path('employees/', EmployeesView.as_view({'get': 'list'})),
+    path('api/employees/', EmployeesListAPIView.as_view()),
+    path('api/employees/<int:pk>/', EmployeesDetailAPIView.as_view()),
+    path('sendmail/', include('mail.urls')),
+
 ]
