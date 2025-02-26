@@ -11,7 +11,11 @@ from utils.opt2 import (
     iterate
 )
 from swap.models import Shift,ShiftSchedule
-from configure.models import Employee
+from .models import Employees
+from rest_framework import viewsets
+from .serializers import *
+from rest_framework.response import Response
+
 
 logger = logging.getLogger(__name__)
 
@@ -63,3 +67,15 @@ def configure_view(request):
     export_schedule_to_excel(schedule, employees, output_file)
 
     return render(request, 'configure.html', {'employees': employees, 'shifts': shifts})
+
+
+# Creates a view to list all the employees.
+class EmployeesView(viewsets.ModelViewSet):
+    queryset = Employees.objects.all()
+    serializer_class = EmployeesSerializer
+
+    # This will handle GET requests for listing employees
+    def list(self, request):
+        employees = Employees.objects.all()
+        serializer = EmployeesSerializer(employees, many=True)
+        return Response(serializer.data)

@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'swap',
     'configure',
     'mail',
-    'home',
 ]
 
 
