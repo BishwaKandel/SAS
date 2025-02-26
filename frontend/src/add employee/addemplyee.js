@@ -197,7 +197,7 @@ const AddEmployeeRecord = () => {
 										},
 										{
 											value: "cleaner",
-											label: "Cleaner",
+											label: "Cleaning Staff",
 										},
 										{
 											value: "manager",
@@ -206,6 +206,14 @@ const AddEmployeeRecord = () => {
 										{
 											value: "inventory_managers",
 											label: "Inventory Managers",
+										},
+										{
+											value: "customer_help",
+											label: "Customer Help",
+										},
+										{
+											value: "supervisors",
+											label: "Supervisors",
 										},
 									]}
 									suffixIcon={<SolutionOutlined />}
@@ -277,6 +285,13 @@ const AddEmployeeRecord = () => {
 							<Button
 								type="primary"
 								htmlType="submit"
+								style={{
+									marginLeft: "10px",
+									background: "linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%)",
+	
+									fontSize: "18px",
+									padding: "12px 24px",
+								}}
 								size="large"
 								loading={loading}
 								disabled={loading}

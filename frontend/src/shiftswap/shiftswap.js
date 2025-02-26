@@ -4,21 +4,21 @@ import {
 	Form,
 	Input,
 	Button,
-	DatePicker,
 	Typography,
 	Row,
 	Col,
 	message,
+	Select,
 } from "antd";
 import {
 	SwapOutlined,
-	UserOutlined,
 	IdcardOutlined,
-	CalendarOutlined,
+	CheckCircleOutlined,
+	ThunderboltOutlined,
 } from "@ant-design/icons";
-import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const ShiftSwap = () => {
 	const [form] = Form.useForm();
@@ -30,7 +30,7 @@ const ShiftSwap = () => {
 		if (
 			values.employee1Id &&
 			values.employee2Id &&
-			values.shiftId1 !== values.shiftId2
+			values.shiftName1 !== values.shiftName2
 		) {
 			setResultMessage("Valid for Swap");
 			setSwapAvailable(true);
@@ -53,7 +53,7 @@ const ShiftSwap = () => {
 			style={{
 				display: "flex",
 				justifyContent: "center",
-				alignItems: "flex-start",
+				alignItems: "center",
 				height: "100vh",
 				background: "#f0f2f5",
 				padding: "20px",
@@ -61,20 +61,14 @@ const ShiftSwap = () => {
 		>
 			<Card
 				style={{
-					width: 600,
+					width: 800,
 					padding: "20px",
 					borderRadius: "10px",
 					boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
 					background: "#fff",
 				}}
 			>
-				<Title
-					level={3}
-					style={{
-						textAlign: "center",
-						marginBottom: "15px",
-					}}
-				>
+				<Title level={3} style={{ textAlign: "center" }}>
 					🔄 Shift Exchange Portal
 				</Title>
 				<Text
@@ -90,125 +84,93 @@ const ShiftSwap = () => {
 				</Text>
 
 				<Form form={form} layout="vertical">
-					<Row gutter={16}>
-						{/* Employee 1 Section */}
-						<Col span={11}>
+					<Row gutter={16} style={{ marginBottom: 20 }}>
+						<Col span={12}>
+							<Form.Item
+								name="shiftDay"
+								label="Shift Day"
+								rules={[{ required: true }]}
+							>
+								<Select placeholder="Select Day">
+									{Array.from({ length: 7 }, (_, i) => (
+										<Option
+											key={i + 1}
+											value={`day${i + 1}`}
+										>
+											Day {i + 1}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+						</Col>
+						<Col span={12}>
+							<Form.Item
+								name="designation"
+								label="Designation"
+								rules={[{ required: true }]}
+							>
+								<Select placeholder="Select Designation">
+									<Option value="cashier">Cashier</Option>
+									<Option value="manager">Manager</Option>
+									<Option value="customer_help">
+										Customer Help
+									</Option>
+									<Option value="supervisor">
+										Supervisor
+									</Option>
+									<Option value="cleaning_staff">
+										Cleaning Staff
+									</Option>
+									<Option value="inventory_manager">
+										Inventory Manager
+									</Option>
+								</Select>
+							</Form.Item>
+						</Col>
+					</Row>
+
+					<Row gutter={16} align="middle" justify="center">
+						<Col span={10}>
 							<Card title="👤 Employee 1" bordered>
 								<Form.Item
 									name="employee1Id"
-									label="Staff ID"
-									rules={[
-										{
-											required: true,
-											message: "Please enter Staff ID!",
-										},
-									]}
+									label="Employee ID"
+									rules={[{ required: true }]}
 								>
 									<Input
 										prefix={<IdcardOutlined />}
-										placeholder="E-1234"
-									/>
-								</Form.Item>
-
-								<Form.Item
-									name="shiftDay1"
-									label="Shift Date"
-									rules={[
-										{
-											required: true,
-											message: "Please select shift date!",
-										},
-									]}
-								>
-									<DatePicker
-										format="YYYY-MM-DD"
-										style={{ width: "100%" }}
-									/>
-								</Form.Item>
-
-								<Form.Item
-									name="shiftId1"
-									label="Shift ID"
-									rules={[
-										{
-											required: true,
-											message: "Please enter Shift ID!",
-										},
-									]}
-								>
-									<Input
-										prefix={<CalendarOutlined />}
-										placeholder="SH-5678"
+										placeholder="E-1001"
 									/>
 								</Form.Item>
 							</Card>
 						</Col>
 
-						{/* Swap Icon */}
 						<Col
-							span={2}
+							span={4}
 							style={{
 								display: "flex",
-								alignItems: "center",
 								justifyContent: "center",
+								alignItems: "center",
 							}}
 						>
 							<SwapOutlined
 								style={{
-									fontSize: "30px",
+									fontSize: "36px",
 									color: "#1890ff",
 								}}
 							/>
 						</Col>
 
-						{/* Employee 2 Section */}
-						<Col span={11}>
+						<Col span={10}>
 							<Card title="👤 Employee 2" bordered>
 								<Form.Item
 									name="employee2Id"
-									label="Staff ID"
-									rules={[
-										{
-											required: true,
-											message: "Please enter Staff ID!",
-										},
-									]}
+									label="Employee ID"
+									rules={[{ required: true }]}
 								>
 									<Input
 										prefix={<IdcardOutlined />}
-										placeholder="E-5678"
-									/>
-								</Form.Item>
-
-								<Form.Item
-									name="shiftDay2"
-									label="Shift Date"
-									rules={[
-										{
-											required: true,
-											message: "Please select shift date!",
-										},
-									]}
-								>
-									<DatePicker
-										format="YYYY-MM-DD"
-										style={{ width: "100%" }}
-									/>
-								</Form.Item>
-
-								<Form.Item
-									name="shiftId2"
-									label="Shift ID"
-									rules={[
-										{
-											required: true,
-											message: "Please enter Shift ID!",
-										},
-									]}
-								>
-									<Input
-										prefix={<CalendarOutlined />}
-										placeholder="SH-1234"
+										placeholder="E-1002"
 									/>
 								</Form.Item>
 							</Card>
@@ -223,10 +185,32 @@ const ShiftSwap = () => {
 					>
 						<Button
 							type="primary"
-							icon={<UserOutlined />}
+							style={{
+								background:
+									"linear-gradient(135deg, #1890ff 0%, #0050b3 100%)",
+								borderColor: "#52c41a",
+								fontSize: "18px",
+								padding: "12px 24px",
+							}}
 							onClick={checkSwap}
+							icon={<CheckCircleOutlined />}
 						>
 							Verify Swap Eligibility
+						</Button>
+						<Button
+							type="primary"
+							style={{
+								marginLeft: "80px",
+								background: "linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)",
+								
+								fontSize: "18px",
+								padding: "12px 24px",
+							}}
+							onClick={swapShifts}
+							disabled={!swapAvailable}
+							icon={<ThunderboltOutlined />}
+						>
+							Generate
 						</Button>
 					</div>
 
@@ -235,34 +219,15 @@ const ShiftSwap = () => {
 							style={{
 								textAlign: "center",
 								marginTop: "15px",
+								fontSize: "16px",
+								fontWeight: "bold",
 								color: swapAvailable
 									? "#52c41a"
 									: "#ff4d4f",
-								fontSize: "16px",
-								fontWeight: "bold",
 							}}
 						>
-							{swapAvailable
-								? `✅ ${resultMessage}`
-								: `⚠️ ${resultMessage}`}
-						</div>
-					)}
-
-					{swapAvailable && (
-						<div
-							style={{
-								textAlign: "center",
-								marginTop: "20px",
-							}}
-						>
-							<Button
-								type="primary"
-								danger
-								icon={<SwapOutlined />}
-								onClick={swapShifts}
-							>
-								Confirm Shift Exchange
-							</Button>
+							{swapAvailable ? "✅ " : "⚠️ "}
+							{resultMessage}
 						</div>
 					)}
 				</Form>
