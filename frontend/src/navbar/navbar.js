@@ -107,7 +107,7 @@ const Navbar = () => {
 					>
 						<Menu.Item key="/" icon={<HomeOutlined />}>
 							<Link
-								to="/"
+								to="/home"
 								style={{
 									color: "inherit",
 									textDecoration: "none",
@@ -164,7 +164,7 @@ const Navbar = () => {
 
 						<Menu.Item key="" icon={<EyeOutlined />}>
 							<Link
-								to=""
+								to="/home"
 								style={{
 									color: "inherit",
 									textDecoration: "none",

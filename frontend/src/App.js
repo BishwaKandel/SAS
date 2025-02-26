@@ -24,7 +24,7 @@ const AppLayout = () => {
       {!hideNavbar && <Navbar />}
       <Content style={{ padding: "20px", marginTop: hideNavbar ? 0 : 64 }}> 
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/home" element={<Home />} />
