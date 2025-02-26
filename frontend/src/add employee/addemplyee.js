@@ -197,7 +197,7 @@ const AddEmployeeRecord = () => {
 										},
 										{
 											value: "cleaner",
-											label: "Cleaner",
+											label: "Cleaning Staff",
 										},
 										{
 											value: "manager",
@@ -206,6 +206,14 @@ const AddEmployeeRecord = () => {
 										{
 											value: "inventory_managers",
 											label: "Inventory Managers",
+										},
+										{
+											value: "customer_help",
+											label: "Customer Help",
+										},
+										{
+											value: "supervisors",
+											label: "Supervisors",
 										},
 									]}
 									suffixIcon={<SolutionOutlined />}
