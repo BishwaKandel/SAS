@@ -62,7 +62,7 @@ const EmployeeForm = () => {
 					<Title
 						level={2}
 						style={{
-							marginTop: 8,
+							marginTop: 16,
 							color: "#fff",
 							background:
 								"linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
