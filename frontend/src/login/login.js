@@ -24,59 +24,89 @@ const { Title, Text } = Typography;
 const Login = () => {
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
-
 	const handleLogin = async (values) => {
 		setLoading(true);
 		message.loading({
-			content: "Logging in...",
-			key: "login",
+		  content: "Logging in...",
+		  key: "login",
 		});
-
-		// Temporary Credentials
-		// const tempManagerID = "1234";
-		// const tempPassword = "123456";
-
-		// if (
-		// 	values.managerID === tempManagerID &&
-		// 	values.password === tempPassword
-		// ) {
-		// 	message.success({
-		// 		content: "Logged in with temporary credentials!",
-		// 		key: "login",
-		// 	});
-		// 	localStorage.setItem("authToken", "tempToken");
-		// 	navigate("/home");
-		// 	setLoading(false);
-		// 	return;
-		// }
-
+	  
 		try {
-			const response = await axios.post(
-				"http://127.0.0.1:8000/api/auth/login",
-				{
-					ManagerID: values.managerID,
-					password: values.password,
-				}
-			);
-
-			console.log(response.data); // Debug API response
-
-			if (response.data.status) {
-				alert("Login successful!");
-				localStorage.setItem("authStatus", "true"); // Store authentication status
-				navigate("/home");
-			} else {
-				alert(
-					response.data.message ||
-						"Invalid Manager ID or Password"
-				);
+		  const response = await axios.post(
+			"http://127.0.0.1:8000/api/auth/login",
+			{
+			  ManagerID: values.managerID,
+			  password: values.password,
 			}
+		  );
+	  
+		  if (response.data.status) {
+			alert("Login successful!");
+			localStorage.setItem("authToken", response.data.access); // Store the access token
+			navigate("/home");
+		  } else {
+			alert(response.data.message || "Invalid Manager ID or Password");
+		  }
 		} catch (err) {
-			alert("Network Error: Unable to reach the server.");
+		  alert("Network Error: Unable to reach the server.");
 		} finally {
-			setLoading(false);
+		  setLoading(false);
 		}
-	};
+	  };
+	  
+
+	// const handleLogin = async (values) => {
+	// 	setLoading(true);
+	// 	message.loading({
+	// 		content: "Logging in...",
+	// 		key: "login",
+	// 	});
+
+	// 	// Temporary Credentials
+	// 	// const tempManagerID = "1234";
+	// 	// const tempPassword = "123456";
+
+	// 	// if (
+	// 	// 	values.managerID === tempManagerID &&
+	// 	// 	values.password === tempPassword
+	// 	// ) {
+	// 	// 	message.success({
+	// 	// 		content: "Logged in with temporary credentials!",
+	// 	// 		key: "login",
+	// 	// 	});
+	// 	// 	localStorage.setItem("authToken", "tempToken");
+	// 	// 	navigate("/home");
+	// 	// 	setLoading(false);
+	// 	// 	return;
+	// 	// }
+
+	// 	try {
+	// 		const response = await axios.post(
+	// 			"http://127.0.0.1:8000/api/auth/login",
+	// 			{
+	// 				ManagerID: values.managerID,
+	// 				password: values.password,
+	// 			}
+	// 		);
+
+	// 		console.log(response.data); // Debug API response
+
+	// 		if (response.data.status) {
+	// 			alert("Login successful!");
+	// 			localStorage.setItem("authStatus", "true"); // Store authentication status
+	// 			navigate("/home");
+	// 		} else {
+	// 			alert(
+	// 				response.data.message ||
+	// 					"Invalid Manager ID or Password"
+	// 			);
+	// 		}
+	// 	} catch (err) {
+	// 		alert("Network Error: Unable to reach the server.");
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	return (
 		<div

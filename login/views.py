@@ -12,7 +12,16 @@ from rest_framework.permissions import IsAuthenticated
 
 class RegisterView(generics.CreateAPIView):
     queryset = HRManager.objects.all()
-    serializer_class = RegisterSerializer   
+    serializer_class = RegisterSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        manager_id = response.data.get('ManagerID')  # Return the Manager ID in the response
+        return Response({
+            "status": True,
+            "message": "User created successfully",
+            "managerId": manager_id
+        })   
 
 
 class LoginView(generics.GenericAPIView):

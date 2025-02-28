@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth.hashers import check_password, make_password
+from django.utils.crypto import get_random_string
 
 
 class HRManagerSerializer(serializers.ModelSerializer):
@@ -13,18 +14,32 @@ class HRManagerSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = HRManager
-        fields = ('ManagerID','username', 'email','password')
+        fields = ('ManagerID', 'username', 'email', 'password')
 
     def create(self, validated_data):
+        # If ManagerID is not in validated_data, generate a unique one
+        manager_id = validated_data.get('ManagerID') or self.generate_unique_manager_id()
+
+        # Add the generated ManagerID to validated_data
+        validated_data['ManagerID'] = manager_id
+
+        # Create the HRManager user with the ManagerID
         hr_manager = HRManager.objects.create_user(
             validated_data['ManagerID'],
             validated_data['email'],
             validated_data['username'],
             validated_data['password'],
         )
-        return hr_manager
-    
 
+        return hr_manager
+
+    def generate_unique_manager_id(self):
+        # Generate a 4-digit ManagerID
+        while True:
+            manager_id = get_random_string(length=4, allowed_chars='0123456789')
+            # Check if the generated ManagerID already exists in the database
+            if not HRManager.objects.filter(ManagerID=manager_id).exists():
+                return manager_id
 
 class LoginSerializer(serializers.Serializer):
     ManagerID = serializers.CharField(required = True)

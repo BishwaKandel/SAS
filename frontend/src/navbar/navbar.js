@@ -18,6 +18,14 @@ const Navbar = () => {
 	const [selectedKey, setSelectedKey] = useState(
 		location.pathname
 	);
+	const handleLogout = () => {
+		// Clear the authToken
+		localStorage.removeItem("authToken");
+		
+		// Redirect to login page
+		window.location.replace("/login"); // or use navigate("/login") if using react-router
+	  };
+	  
 
 	useEffect(() => {
 		setSelectedKey(location.pathname);
@@ -191,9 +199,10 @@ const Navbar = () => {
 								justifyContent: "center",
 								background: "transparent", // Remove background
 							}}
+							onClick={handleLogout}
 						>
 							<Link
-								to="/login"
+								
 								style={{
 									color: "inherit",
 									textDecoration: "none",
