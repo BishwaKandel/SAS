@@ -77,7 +77,7 @@ const Navbar = () => {
 						}}
 					>
 						<Link
-							to="/"
+							to="/home"
 							style={{
 								textDecoration: "none",
 								color: "#fff",

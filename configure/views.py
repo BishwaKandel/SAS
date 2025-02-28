@@ -90,6 +90,8 @@ class EmployeesListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print("Validation Errors:", serializer.errors)  # 👀 Print errors to console
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -118,45 +120,30 @@ class EmployeesDetailAPIView(APIView):
         # if serializer.is_valid():
         updated_data = {}
 
-        # Check for each field in the request and add it to updated_data if it's provided
-        if 'e_id' in request.data:
-            updated_data['e_id'] = request.data['e_id']  # Update name if provided
-
-        if 'e_name' in request.data:
-            updated_data['e_name'] = request.data['e_name']  # Update name if provided
-        
-        if 'no_of_hours_worked' in request.data:
-            updated_data['no_of_hours_worked'] = request.data['no_of_hours_worked']  # Update no_of_hours_worked if provided
-        
-        if 'designation' in request.data:
-            updated_data['designation'] = request.data['designation']  # Update designation if provided
-
-        if 'e_gmail' in request.data:
-            updated_data['e_gmail'] = request.data['e_gmail']  # Update e_gmail if provided
-
-        if 'e_priority' in request.data:
-            updated_data['e_priority'] = request.data['e_priority']  # Update priority if provided
-
-        
+       
           # Fields to be updated based on the frontend request
-        # fields_to_update = {
-        #     'e_id': request.data.get('e_id'),
-        #     'e_name': request.data.get('e_name'),
-        #     'no_of_hours_worked': request.data.get('no_of_hours_worked'),
-        #     'designation': request.data.get('designation'),
-        #     'e_gmail': request.data.get('e_gmail'),
-        #     'e_priority': request.data.get('e_priority'),
+        fields_to_update = {
+            'e_id': request.data.get('e_id'),
+            'e_name': request.data.get('e_name'),
+            'no_of_hours_worked': request.data.get('no_of_hours_worked'),
+            'designation': request.data.get('designation'),
+            'e_gmail': request.data.get('e_gmail'),
+            'e_priority': request.data.get('e_priority'),
             
-        # }
+        }
 
 
         # Update the employee object with new values for the modified fields
-        for field, value in updated_data.items():
-            setattr(employee, field, value)
-            employee.save()
-            serializer = EmployeesSerializer(employee)
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        for field, value in fields_to_update.items():
+            if value is not None:  # Ensuring only provided fields are updated
+               setattr(employee, field, value)
+
+    # Save the updated employee object after modifying all required fields
+        employee.save()
+
+    # Serialize and return the updated employee object
+        serializer = EmployeesSerializer(employee)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         employee = self.get_employee(pk)

@@ -33,54 +33,46 @@ const Login = () => {
 		});
 
 		// Temporary Credentials
-		const tempManagerID = "1234";
-		const tempPassword = "123456";
+		// const tempManagerID = "1234";
+		// const tempPassword = "123456";
 
-		if (
-			values.managerID === tempManagerID &&
-			values.password === tempPassword
-		) {
-			message.success({
-				content: "Logged in with temporary credentials!",
-				key: "login",
-			});
-			localStorage.setItem("authToken", "tempToken");
-			navigate("/home");
-			setLoading(false);
-			return;
-		}
+		// if (
+		// 	values.managerID === tempManagerID &&
+		// 	values.password === tempPassword
+		// ) {
+		// 	message.success({
+		// 		content: "Logged in with temporary credentials!",
+		// 		key: "login",
+		// 	});
+		// 	localStorage.setItem("authToken", "tempToken");
+		// 	navigate("/home");
+		// 	setLoading(false);
+		// 	return;
+		// }
 
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1:8000/login/",
+				"http://127.0.0.1:8000/api/auth/login",
 				{
 					ManagerID: values.managerID,
 					password: values.password,
 				}
 			);
 
-			if (response.data.token) {
-				localStorage.setItem(
-					"authToken",
-					response.data.token
-				);
-				message.success({
-					content: "Login successful!",
-					key: "login",
-				});
+			console.log(response.data); // Debug API response
+
+			if (response.data.status) {
+				alert("Login successful!");
+				localStorage.setItem("authStatus", "true"); // Store authentication status
 				navigate("/home");
 			} else {
-				message.error({
-					content: "Invalid Manager ID or Password",
-					key: "login",
-				});
+				alert(
+					response.data.message ||
+						"Invalid Manager ID or Password"
+				);
 			}
 		} catch (err) {
-			message.error({
-				content:
-					"Network Error: Unable to reach the server.",
-				key: "login",
-			});
+			alert("Network Error: Unable to reach the server.");
 		} finally {
 			setLoading(false);
 		}
@@ -176,7 +168,6 @@ const Login = () => {
 								marginBottom: "15px",
 							}}
 						>
-							<Checkbox>Remember for 30 days</Checkbox>
 							<a href="/forgot-password">
 								Forgot password?
 							</a>
@@ -193,7 +184,8 @@ const Login = () => {
 									fontSize: "16px",
 									background: "#002855",
 									borderColor: "#1890ff",
-									boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+									boxShadow:
+										"0px 4px 10px rgba(0, 0, 0, 0.2)",
 									borderBottom: "1px solid #004080",
 								}}
 							>

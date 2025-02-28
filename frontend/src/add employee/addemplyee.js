@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import ToastBar from "../utils/toast_bar_notifi"; 
-import "antd/dist/reset.css"; 
+import "antd/dist/reset.css";
 import {
 	Form,
 	Input,
@@ -30,38 +29,57 @@ const AddEmployeeRecord = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const isAddingAnother = useRef(false);
+	const [toast, setToast] = useState(null); 
 
-	const showNotification = (message, description, type) => {
-        notification[type]({
-            message: message,
-            description: description,
-            placement: "topRight",
-        });
-    };
-    
+	
+	const [api, contextHolder] = notification.useNotification();
 
 	const handleSubmit = async (values) => {
-        setLoading(true);
-        try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-            console.log("Employee Record Submitted:", values);
-            
-            // Call showNotification directly
-            showNotification("Success", "Employee added successfully!", "success");
-    
-            if (isAddingAnother.current) {
-                form.resetFields();
-                isAddingAnother.current = false;
-            }
-        } catch (error) {
-            showNotification("Error", "Error adding employee. Please try again.", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
-    
+		setLoading(true);
+		try {
+			const response = await fetch("http://127.0.0.1:8000/api/employees/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+	
+			const data = await response.json();
+	
+			if (response.ok) {
+				api.success({
+					message: "Success",
+					description: "Employee added successfully!",
+					placement: "topRight",
+				});
+				if (isAddingAnother.current) {
+					form.resetFields();
+					isAddingAnother.current = false;
+				}
+			} else {
+				// Extract detailed error messages
+				const errorMessages = Object.keys(data)
+					.map((key) => `${key}: ${data[key].join(", ")}`)
+					.join("\n");
+	
+				api.error({
+					message: "Error",
+					description: errorMessages || "Failed to add employee",
+					placement: "topRight",
+				});
+			}
+		} catch (error) {
+			api.error({
+				message: "Error",
+				description: "Error adding employee. Please try again.",
+				placement: "topRight",
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	
 
 	const handleAddAnother = () => {
 		isAddingAnother.current = true;
@@ -70,19 +88,23 @@ const AddEmployeeRecord = () => {
 
 	const handleReset = () => {
 		form.resetFields();
-		showNotification("info", "Form cleared","success");
+		setToast({ type: "info", message: "Form Cleared", description: "The form has been reset successfully." });
 	};
-    const priorityOptions = Array.from({ length: 11 }, (_, index) => 10 - index);
+
+	const priorityOptions = Array.from(
+		{ length: 11 },
+		(_, index) => 10 - index
+	);
 	return (
 		<div
-        style={{
-            width: "100vw",
-            minHeight: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-start", // Change from center to flex-start
-            paddingTop: "60px", // Adjust as needed
-        }}
+			style={{
+				width: "100vw",
+				minHeight: "100vh",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "flex-start", // Change from center to flex-start
+				paddingTop: "60px", // Adjust as needed
+			}}
 		>
 			<Card
 				style={{
@@ -99,7 +121,7 @@ const AddEmployeeRecord = () => {
 						marginBottom: "24px",
 					}}
 				>
-					Enter the New Employee Details 
+					Enter the New Employee Details
 				</Title>
 				<Form
 					form={form}
@@ -192,28 +214,28 @@ const AddEmployeeRecord = () => {
 									placeholder="Select role"
 									options={[
 										{
-											value: "cashier",
+											value: "Cashier",
 											label: "Cashier",
 										},
 										{
-											value: "cleaner",
+											value: "Cleaner",
 											label: "Cleaning Staff",
 										},
 										{
-											value: "manager",
+											value: "Manager",
 											label: "Manager",
 										},
 										{
-											value: "inventory_managers",
-											label: "Inventory Managers",
+											value: "Inventory Manager",
+											label: "Inventory Manager",
 										},
 										{
-											value: "customer_help",
+											value: "Customer Help",
 											label: "Customer Help",
 										},
 										{
-											value: "supervisors",
-											label: "Supervisors",
+											value: "Supervisor",
+											label: "Supervisor",
 										},
 									]}
 									suffixIcon={<SolutionOutlined />}
@@ -224,7 +246,7 @@ const AddEmployeeRecord = () => {
 						<Col xs={24} sm={12} md={8}>
 							<Form.Item
 								label="Work Email"
-								name="email"
+								name="e_gmail"
 								rules={[
 									{
 										type: "email",
@@ -242,38 +264,43 @@ const AddEmployeeRecord = () => {
 							</Form.Item>
 						</Col>
 
-                        <Col xs={24} sm={12} md={8}>
-                        <Form.Item 
-                            label="Priority Level" 
-                            name="e_priority" 
-                            rules={[{ 
-                                required: true, 
-                                message: "Please select priority level" 
-                            }, {
-                                type: 'number',
-                                min: 0,
-                                max: 10,
-                                message: "Priority must be between 0-10"
-                            }]}
-                        >
-                            <Select
-                                placeholder="Select priority level"
-                                suffixIcon={<StarOutlined />}
-                                showSearch
-                                optionFilterProp="children"
-                            >
-                                {priorityOptions.map(value => (
-                                    <Option key={value} value={value}>
-                                        {value} - {
-                                            value === 10 ? 'Highest Priority' :
-                                            value === 0 ? 'Lowest Priority' :
-                                            `Priority Level ${10 - value}`
-                                        }
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
+						<Col xs={24} sm={12} md={8}>
+							<Form.Item
+								label="Priority Level"
+								name="e_priority"
+								rules={[
+									{
+										required: true,
+										message: "Please select priority level",
+									},
+									{
+										type: "number",
+										min: 0,
+										max: 10,
+										message:
+											"Priority must be between 0-10",
+									},
+								]}
+							>
+								<Select
+									placeholder="Select priority level"
+									suffixIcon={<StarOutlined />}
+									showSearch
+									optionFilterProp="children"
+								>
+									{priorityOptions.map((value) => (
+										<Option key={value} value={value}>
+											{value} -{" "}
+											{value === 10
+												? "Highest Priority"
+												: value === 0
+												? "Lowest Priority"
+												: `Priority Level ${10 - value}`}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+						</Col>
 					</Row>
 
 					<Row
@@ -287,8 +314,9 @@ const AddEmployeeRecord = () => {
 								htmlType="submit"
 								style={{
 									marginLeft: "10px",
-									background: "linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%)",
-	
+									background:
+										"linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%)",
+
 									fontSize: "18px",
 									padding: "12px 24px",
 								}}
