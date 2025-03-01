@@ -75,7 +75,7 @@ def assign_shifts_api(request):
 # List all employees and create a new one
 class EmployeeListAPIView(APIView):
     def get(self, request):
-        employees = Employee.objects.all()
+        employee = Employee.objects.all()
         serializer = EmployeeSerializer(employee, many=True)
         return Response(serializer.data)
 
@@ -98,16 +98,16 @@ class EmployeeDetailAPIView(APIView):
             return None  # We will handle the response inside each method
 
     def get(self, request, pk):
-        employees = self.get_employee(pk)
-        if not employees:
+        employee = self.get_employee(pk)
+        if not employee:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        employees = self.get_employee(pk)
-        if not employees:
+        employee = self.get_employee(pk)
+        if not employee:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
         # serializer = EmployeeSerializer(employee, data=request.data)
@@ -130,20 +130,20 @@ class EmployeeDetailAPIView(APIView):
         # Update the employee object with new values for the modified fields
         for field, value in fields_to_update.items():
             if value is not None:  # Ensuring only provided fields are updated
-               setattr(employees, field, value)
+               setattr(employee, field, value)
 
     # Save the updated employee object after modifying all required fields
-        employees.save()
+        employee.save()
 
     # Serialize and return the updated employee object
-        serializer = EmployeeSerializer(employees)
+        serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
-        employees = self.get_employee(pk)
-        if not employees:
+        employee = self.get_employee(pk)
+        if not employee:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        employees.delete()
+        employee.delete()
         return Response({'message': 'Employee deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 

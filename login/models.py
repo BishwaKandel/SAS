@@ -42,7 +42,8 @@ class HRManager(models.Model):
             self.set_password(self.password)
         super().save(*args, **kwargs)
 
-
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
 
 
 
