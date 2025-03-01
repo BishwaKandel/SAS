@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import send_email_view
+from .views import *
 
 urlpatterns = [
-    path('', send_email_view, name='send_email'),
+    path('', SendEmailView.as_view(), name='send_email'),
 ]

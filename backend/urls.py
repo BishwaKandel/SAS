@@ -41,5 +41,6 @@ urlpatterns = [
     path('api/employees/<int:pk>/', EmployeeDetailAPIView.as_view()),
     path('sendmail/', include('mail.urls')),
     path('swap/', include('swap.urls')),
+    path("get-excel/", RetrieveExcelView.as_view()),
 
 ]

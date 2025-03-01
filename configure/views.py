@@ -16,7 +16,7 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView  
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from .serializers import ShiftAssignmentSerializer
 from swap.models import ShiftSchedule, Shift
@@ -147,3 +147,27 @@ class EmployeeDetailAPIView(APIView):
         employee.delete()
         return Response({'message': 'Employee deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
+
+
+class RetrieveExcelView(APIView):
+    def get(self, request):
+        
+        file_path = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.xlsx")
+
+        if not os.path.exists(file_path):
+            return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            # Read the file using Pandas
+            if file_path.endswith(".xlsx"):
+                df = pd.read_excel(file_path)  # Read Excel file
+            else:
+                df = pd.read_csv(file_path)  # Read CSV file
+
+            data = df.to_dict(orient="records")
+
+            return JsonResponse({"data": data}, status=status.HTTP_200_OK)
+
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
