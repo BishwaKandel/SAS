@@ -11,7 +11,7 @@ from utils.opt2 import (
     iterate
 )
 from swap.models import Shift,ShiftSchedule
-from .models import Employees
+from .models import Employee
 from rest_framework import status
 from .serializers import *
 from rest_framework.response import Response
@@ -33,8 +33,8 @@ def assign_shifts_api(request):
     if serializer.is_valid():
         designation_counts = serializer.validated_data['designation_counts']
 
-        employees = list(Employee.objects.all().values())
-        employees_by_designation = iterate(employees)
+        employee = list(Employee.objects.all().values())
+        employee_by_designation = iterate(employee)
 
         # ✅ Fetch shifts directly from Shift model (not ShiftSchedule)
         shifts_dict = {}
@@ -48,13 +48,13 @@ def assign_shifts_api(request):
             })
 
         # ✅ Assign shifts based on fetched Shift objects
-        schedule = assign_shifts(shifts_dict, employees_by_designation, designation_counts, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY)
+        schedule = assign_shifts(shifts_dict, employee_by_designation, designation_counts, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY)
 
         # ✅ Save schedule as Excel & CSV
         excel_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.xlsx")
         csv_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.csv")
 
-        export_schedule_to_excel(schedule, employees, excel_file)
+        export_schedule_to_excel(schedule, employee, excel_file)
 
         df = pd.read_excel(excel_file)
         df.to_csv(csv_file, index=False)
@@ -74,10 +74,10 @@ def assign_shifts_api(request):
 
 
 # List all employees and create a new one
-class EmployeesListAPIView(APIView):
+class EmployeeListAPIView(APIView):
     def get(self, request):
-        employees = Employees.objects.all()
-        serializer = EmployeeSerializer(employees, many=True)
+        employee = Employee.objects.all()
+        serializer = EmployeeSerializer(employee, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -86,16 +86,16 @@ class EmployeesListAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            print("Validation Errors:", serializer.errors)  # 👀 Print errors to console
+            print("Validation Errors:", serializer.errors)  # Print errors to console
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Retrieve, update, or delete a single employee
-class EmployeesDetailAPIView(APIView):
+class EmployeeDetailAPIView(APIView):
     def get_employee(self, pk):
         try:
-            return Employees.objects.get(pk=pk)
-        except Employees.DoesNotExist:
+            return Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
             return None  # We will handle the response inside each method
 
     def get(self, request, pk):
@@ -111,7 +111,7 @@ class EmployeesDetailAPIView(APIView):
         if not employee:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        # serializer = EmployeesSerializer(employee, data=request.data)
+        # serializer = EmployeeSerializer(employee, data=request.data)
         # if serializer.is_valid():
         updated_data = {}
 
