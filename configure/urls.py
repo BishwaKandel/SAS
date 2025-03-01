@@ -12,4 +12,5 @@ from .views import *
 urlpatterns = [
     path('api/employees/', EmployeesListAPIView.as_view(), name='employee_list'),  # List & Create
     path('api/employees/<int:pk>/', EmployeesDetailAPIView.as_view(), name='employee_detail'),  # Retrieve, Update, Delete
+    path('assign-shifts/', assign_shifts_api, name='assign_shifts_api'),
 ]

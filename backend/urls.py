@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from login.views import *
 from configure.views import *
+from swap.views import swap_shifts_api
 
 
 from rest_framework_simplejwt.views import (
@@ -34,10 +35,11 @@ urlpatterns = [
     path('api/auth/login', LoginView.as_view()),
     path('change-password/', ChangePasswordView.as_view()),
     path('reset-password/', ResetPasswordView.as_view()),
-    path('configure/', configure_view),
+    path('configure/', include('configure.urls')),
     # path('employees/', EmployeesView.as_view({'get': 'list'})),
     path('api/employees/', EmployeesListAPIView.as_view()),
     path('api/employees/<int:pk>/', EmployeesDetailAPIView.as_view()),
     path('sendmail/', include('mail.urls')),
+    path('swap/', include('swap.urls')),
 
 ]
