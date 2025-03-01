@@ -19,7 +19,6 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .serializers import ShiftAssignmentSerializer
-from configure.models import Employee 
 from swap.models import ShiftSchedule, Shift
 from utils.opt2 import assign_shifts, iterate, export_schedule_to_excel, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY
 import os
@@ -76,7 +75,7 @@ def assign_shifts_api(request):
 # List all employees and create a new one
 class EmployeeListAPIView(APIView):
     def get(self, request):
-        employee = Employee.objects.all()
+        employees = Employee.objects.all()
         serializer = EmployeeSerializer(employee, many=True)
         return Response(serializer.data)
 
@@ -99,16 +98,16 @@ class EmployeeDetailAPIView(APIView):
             return None  # We will handle the response inside each method
 
     def get(self, request, pk):
-        employee = self.get_employee(pk)
-        if not employee:
+        employees = self.get_employee(pk)
+        if not employees:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        employee = self.get_employee(pk)
-        if not employee:
+        employees = self.get_employee(pk)
+        if not employees:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
         # serializer = EmployeeSerializer(employee, data=request.data)
@@ -131,20 +130,20 @@ class EmployeeDetailAPIView(APIView):
         # Update the employee object with new values for the modified fields
         for field, value in fields_to_update.items():
             if value is not None:  # Ensuring only provided fields are updated
-               setattr(employee, field, value)
+               setattr(employees, field, value)
 
     # Save the updated employee object after modifying all required fields
-        employee.save()
+        employees.save()
 
     # Serialize and return the updated employee object
-        serializer = EmployeeSerializer(employee)
+        serializer = EmployeeSerializer(employees)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
-        employee = self.get_employee(pk)
-        if not employee:
+        employees = self.get_employee(pk)
+        if not employees:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        employee.delete()
+        employees.delete()
         return Response({'message': 'Employee deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
