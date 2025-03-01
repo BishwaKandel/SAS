@@ -16,61 +16,56 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView  
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from .serializers import ShiftAssignmentSerializer
+from configure.models import Employee 
+from swap.models import ShiftSchedule, Shift
+from utils.opt2 import assign_shifts, iterate, export_schedule_to_excel, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY
+import os
+from django.conf import settings
+import pandas as pd
 
+@api_view(['POST'])
+def assign_shifts_api(request):
+    serializer = ShiftAssignmentSerializer(data=request.data)
 
-logger = logging.getLogger(__name__)
+    if serializer.is_valid():
+        designation_counts = serializer.validated_data['designation_counts']
 
+        employees = list(Employee.objects.all().values())
+        employees_by_designation = iterate(employees)
 
-def configure_view(request):
-    # Convert QuerySet to list of dictionaries
-    employees = list(Employee.objects.all().values())
+        # ✅ Fetch shifts directly from Shift model (not ShiftSchedule)
+        shifts_dict = {}
+        shift_objects = Shift.objects.all()
 
-    # Group employees by designation (only call once!)
-    data = iterate(employees)
-    print(employees)
+        for shift in shift_objects:
+            shifts_dict.setdefault(shift.day, []).append({
+                "shift_id": shift.shift_id,
+                "shift_duration": shift.shift_duration,
+                "shift_timing": shift.shift_timing
+            })
 
-    shifts = Shift.objects.all()
+        # ✅ Assign shifts based on fetched Shift objects
+        schedule = assign_shifts(shifts_dict, employees_by_designation, designation_counts, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY)
 
-    # Convert QuerySet to a dictionary
-    shifts = Shift.objects.all()
+        # ✅ Save schedule as Excel & CSV
+        excel_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.xlsx")
+        csv_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.csv")
 
+        export_schedule_to_excel(schedule, employees, excel_file)
 
-# Get all shift schedules, including the associated shift details
-    shift_schedules = ShiftSchedule.objects.select_related('shift').all()
+        df = pd.read_excel(excel_file)
+        df.to_csv(csv_file, index=False)
 
-    # Convert QuerySet to a dictionary
-    shifts_dict = {}
-    for shift_schedule in shift_schedules:
-        shift = shift_schedule.shift  # Access the related Shift object
-        day = shift_schedule.day  # Day from ShiftSchedule model
+        return JsonResponse({
+            "message": "Shift assignment successful",
+            "schedule_file": excel_file,
+            "csv_file": csv_file
+        }, status=200)
 
-        shifts_dict.setdefault(day, []).append({
-            "shift_id": shift.shift_id,
-            "shift_duration": shift.shift_duration,
-            "shift_timing": shift.shift_timing
-        })
-
-
-
-    # Debugging: Print the shift structure to confirm format
-    print("Shifts Dict:", shifts_dict)
-
-    # Assign shifts
-    designation_counts = get_employee_count_by_designation()
-    print("Designation Counts:", designation_counts)  # Debugging
-
-    schedule = assign_shifts(
-        shifts_dict, data, designation_counts, MAX_WORKING_HOURS)
-
-    # Save to Excel
-    output_file = os.path.join(
-        settings.MEDIA_ROOT, "OPT22_with_Working_Hours.xlsx")
-    export_schedule_to_excel(schedule, employees, output_file)
-
-    return render(request, 'configure.html', {'employees': employees, 'shifts': shifts})
-
-
-
+    return JsonResponse({"error": serializer.errors}, status=400)
 
 
 
@@ -82,11 +77,11 @@ def configure_view(request):
 class EmployeesListAPIView(APIView):
     def get(self, request):
         employees = Employees.objects.all()
-        serializer = EmployeesSerializer(employees, many=True)
+        serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = EmployeesSerializer(data=request.data)
+        serializer = EmployeeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -108,7 +103,7 @@ class EmployeesDetailAPIView(APIView):
         if not employee:
             return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = EmployeesSerializer(employee)
+        serializer = EmployeeSerializer(employee)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -142,7 +137,7 @@ class EmployeesDetailAPIView(APIView):
         employee.save()
 
     # Serialize and return the updated employee object
-        serializer = EmployeesSerializer(employee)
+        serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
