@@ -37,8 +37,8 @@ urlpatterns = [
     path('reset-password/', ResetPasswordView.as_view()),
     path('configure/', include('configure.urls')),
     # path('employees/', EmployeesView.as_view({'get': 'list'})),
-    path('api/employees/', EmployeesListAPIView.as_view()),
-    path('api/employees/<int:pk>/', EmployeesDetailAPIView.as_view()),
+    path('api/employees/', EmployeeListAPIView.as_view()),
+    path('api/employees/<int:pk>/', EmployeeDetailAPIView.as_view()),
     path('sendmail/', include('mail.urls')),
     path('swap/', include('swap.urls')),
 

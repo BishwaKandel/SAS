@@ -3,10 +3,10 @@ from django.conf import settings
 import os
 import logging
 from utils.opt2 import (
-    get_employee_count_by_designation,
+    #count_by_designation,
     export_schedule_to_excel,
     assign_shifts,
-    employees_by_designation,
+    # employees_by_designation,
     MAX_WORKING_HOURS,
     iterate
 )
@@ -33,8 +33,8 @@ def assign_shifts_api(request):
     if serializer.is_valid():
         designation_counts = serializer.validated_data['designation_counts']
 
-        employee = list(Employee.objects.all().values())
-        employee_by_designation = iterate(employee)
+        employees = list(Employee.objects.all().values())
+        employees_by_designation = iterate(employees)
 
         # ✅ Fetch shifts directly from Shift model (not ShiftSchedule)
         shifts_dict = {}
@@ -48,13 +48,13 @@ def assign_shifts_api(request):
             })
 
         # ✅ Assign shifts based on fetched Shift objects
-        schedule = assign_shifts(shifts_dict, employee_by_designation, designation_counts, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY)
+        schedule = assign_shifts(shifts_dict, employees_by_designation, designation_counts, MAX_WORKING_HOURS, MAX_SHIFTS_PER_DAY)
 
         # ✅ Save schedule as Excel & CSV
         excel_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.xlsx")
         csv_file = os.path.join(settings.MEDIA_ROOT, "Updated_Schedule.csv")
 
-        export_schedule_to_excel(schedule, employee, excel_file)
+        export_schedule_to_excel(schedule, employees, excel_file)
 
         df = pd.read_excel(excel_file)
         df.to_csv(csv_file, index=False)
