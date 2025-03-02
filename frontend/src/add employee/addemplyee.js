@@ -146,7 +146,7 @@ const AddEmployeeRecord = () => {
 								<InputNumber
 									prefix={<IdcardOutlined />}
 									style={{ width: "100%" }}
-									min={1000}
+									min={1}
 									max={9999}
 									placeholder="E-1234"
 								/>

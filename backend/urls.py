@@ -21,6 +21,7 @@ from django.urls import path, include
 from login.views import *
 from configure.views import *
 from swap.views import swap_shifts_api
+from mail.views import *
 
 
 from rest_framework_simplejwt.views import (
@@ -39,8 +40,9 @@ urlpatterns = [
     # path('employees/', EmployeesView.as_view({'get': 'list'})),
     path('api/employees/', EmployeeListAPIView.as_view()),
     path('api/employees/<int:pk>/', EmployeeDetailAPIView.as_view()),
-    path('sendmail/', include('mail.urls')),
+    path('sendmail/', SendEmailView.as_view()),
     path('swap/', include('swap.urls')),
     path("get-excel/", RetrieveExcelView.as_view()),
+    path('employees/<int:employee_id>/', EmployeeSearchView.as_view()),
 
 ]

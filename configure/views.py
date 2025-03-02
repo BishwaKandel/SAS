@@ -24,7 +24,7 @@ from utils.opt2 import assign_shifts, iterate, export_schedule_to_excel, MAX_WOR
 import os
 from django.conf import settings
 import pandas as pd
-
+from django.shortcuts import get_object_or_404
 @api_view(['POST'])
 def assign_shifts_api(request):
     serializer = ShiftAssignmentSerializer(data=request.data)
@@ -171,3 +171,9 @@ class RetrieveExcelView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class EmployeeSearchView(APIView):
+    def get(self, request, employee_id):
+        employee = get_object_or_404(Employee, e_id=employee_id)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)

@@ -43,7 +43,9 @@ import os
 class SendEmailView(APIView):
     def post(self, request):
         try:
-            file_path = "C:\\django\\SAS_final\\SAS\\Updated_Schdeule.csv",
+            file_path = "D:\\minnor05\\SAS\\Updated_Schedule.xlsx"
+
+           
 
             if not os.path.exists(file_path):  
                 return Response({"error": "File not found!"}, status=status.HTTP_400_BAD_REQUEST)

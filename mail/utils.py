@@ -7,6 +7,7 @@ def send_mail_with_attachment(subject, message, file_path):
     # recipient_list = list(Recipient.objects.values_list('email', flat=True))
     example = [
         "sumeshdhoju@gmail.com",
+        "foradditional00@gmail.com"
         
     ]
     recipient_list = example

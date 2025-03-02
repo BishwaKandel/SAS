@@ -164,7 +164,7 @@ const Navbar = () => {
 
 						<Menu.Item key="" icon={<EyeOutlined />}>
 							<Link
-								to="/home"
+								to="/schedule"
 								style={{
 									color: "inherit",
 									textDecoration: "none",
