@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Input, Space } from "antd";
+import { Table, Input, Space, Button } from "antd";
 
 // Define the light colors based on designation
 const designationColors = {
@@ -14,13 +14,15 @@ const designationColors = {
 const ScheduleTable = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [employeeId, setEmployeeId] = useState(""); // State for employee ID input
+  const [searchTerm, setSearchTerm] = useState(""); // State for search input
   const [searchedData, setSearchedData] = useState(null); // State to store searched employee data
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/get-excel/") // Update with your API URL
       .then((response) => response.json())
       .then((result) => {
+        tempResult = result.trim()
+
         setData(result.data);
         setLoading(false);
       })
@@ -30,29 +32,25 @@ const ScheduleTable = () => {
       });
   }, []);
 
-  // Fetch employee shift details by ID
-  const handleSearch = async () => {
-    if (!employeeId) {
-      alert("Please enter a valid employee ID.");
+  // Handle search function for employee ID, name, or designation
+  const handleSearch = (value) => {
+    setSearchTerm(value); // Set the search term to input value
+    if (!value) {
+      setSearchedData(null); // If empty search term, reset the search result
       return;
     }
 
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/employee/${employeeId}/` // Update with your API URL
-      );
-      if (response.ok) {
-        const result = await response.json();
-        setSearchedData(result); // Update state with fetched data
-      } else {
-        alert("Employee not found.");
-      }
-    } catch (error) {
-      console.error("Error fetching employee data:", error);
-      alert("Error fetching employee data.");
-    }
+    // Filter data by employee ID, name, or designation
+    const filteredData = data.filter(
+      (item) =>
+        item["Employee ID"].toString().includes(value) ||
+        item["Employee Name"].toLowerCase().includes(value.toLowerCase()) ||
+        item["Designation"].toLowerCase().includes(value.toLowerCase())
+    );
+    setSearchedData(filteredData);
   };
 
+  // Handle sending email
   const handleSendMail = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/sendmail/", {
@@ -79,7 +77,21 @@ const ScheduleTable = () => {
     { title: "Employee Name", dataIndex: "Employee Name", key: "Employee Name" },
     { title: "Designation", dataIndex: "Designation", key: "Designation" },
     { title: "Working Hours", dataIndex: "Working Hours", key: "Working Hours" },
-    { title: "Day1", dataIndex: "Day1", key: "Day1" },
+    { title: "Day1", dataIndex: "Day1", key: "Day1",render: (_, { tags }) => (
+      <>
+        {tags.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    )},
     { title: "Day2", dataIndex: "Day2", key: "Day2" },
     { title: "Day3", dataIndex: "Day3", key: "Day3" },
     { title: "Day4", dataIndex: "Day4", key: "Day4" },
@@ -88,24 +100,25 @@ const ScheduleTable = () => {
     { title: "Day7", dataIndex: "Day7", key: "Day7" },
   ];
 
+
+  
   // Define row class for styling based on designation
   const rowClassName = (record) => {
     const designation = record["Designation"];
-    return designation ? `custom-row-${designation.replace(/\s+/g, "-")}` : "";
+    return designation && designationColors[designation]
+      ? `custom-row-${designation.replace(/\s+/g, "-")}`
+      : "";
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <Space style={{ marginBottom: 16 }}>
         <Input
-          placeholder="Enter Employee ID"
-          value={employeeId}
-          onChange={(e) => setEmployeeId(e.target.value)}
+          placeholder="Search by Employee ID, Name, or Designation"
+          value={searchTerm}
+          onChange={(e) => handleSearch(e.target.value)} // Trigger search on input change
           style={{ width: "200px" }}
         />
-        <Button type="primary" onClick={handleSearch}>
-          Search Employee
-        </Button>
       </Space>
 
       <Button
@@ -131,9 +144,9 @@ const ScheduleTable = () => {
       </Button>
 
       {/* Show searched data if available */}
-      {searchedData && (
+      {searchedData && searchedData.length > 0 ? (
         <Table
-          dataSource={[searchedData]} // Wrap in an array for Table
+          dataSource={searchedData} // Use filtered data
           columns={columns}
           rowKey="Employee ID"
           loading={loading}
@@ -141,10 +154,7 @@ const ScheduleTable = () => {
           rowClassName={rowClassName} // Assign class dynamically
           style={{ backgroundColor: "#ffffff" }}
         />
-      )}
-
-      {/* Show all data if no search */}
-      {!searchedData && (
+      ) : (
         <Table
           dataSource={data}
           columns={columns}

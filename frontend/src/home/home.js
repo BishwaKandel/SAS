@@ -60,7 +60,7 @@ const Home = () => {
 					<Button
 						type="primary"
 						icon={<PlusCircleOutlined />}
-						onClick={() => navigate("/shiftdetails")}
+						onClick={() => navigate("/addemployeerecords")}
 						size="large"
 						style={{
 							width: "100%",
@@ -86,7 +86,7 @@ const Home = () => {
 								"0 4px 6px rgba(54, 209, 220, 0.3)";
 						}}
 					>
-						Add New Shifts
+						Add New Employee
 					</Button>
 
 					<Button

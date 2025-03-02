@@ -25,6 +25,8 @@ import os
 from django.conf import settings
 import pandas as pd
 from django.shortcuts import get_object_or_404
+import csv;
+from django.views import View
 @api_view(['POST'])
 def assign_shifts_api(request):
     serializer = ShiftAssignmentSerializer(data=request.data)
@@ -165,6 +167,7 @@ class RetrieveExcelView(APIView):
                 df = pd.read_csv(file_path)  # Read CSV file
 
             data = df.to_dict(orient="records")
+            
 
             return JsonResponse({"data": data}, status=status.HTTP_200_OK)
 
@@ -177,3 +180,29 @@ class EmployeeSearchView(APIView):
         employee = get_object_or_404(Employee, e_id=employee_id)
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data)
+
+class EmployeeCSVSearchView(View):
+    def get(self, request, employee_id):
+        csv_file_path = os.path.join(settings.MEDIA_ROOT, 'Updated_Schedule.csv')  # Update with actual CSV location
+        try:
+            with open(csv_file_path, 'r') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    if row["Employee ID"] == str(employee_id):  # Match ID from CSV
+                        return JsonResponse({
+                            "Employee ID": row["Employee ID"],
+                            "Employee Name": row["Employee Name"],
+                            "Designation": row["Designation"],
+                            "Working Hours": row["Working Hours"],
+                            "Day1": row["Day1"],
+                            "Day2": row["Day2"],
+                            "Day3": row["Day3"],
+                            "Day4": row["Day4"],
+                            "Day5": row["Day5"],
+                            "Day6": row["Day6"],
+                            "Day7": row["Day7"]
+                        }, status=200)
+        except FileNotFoundError:
+            return JsonResponse({"error": "CSV file not found"}, status=500)
+
+        return JsonResponse({"error": "Employee not found"}, status=404)

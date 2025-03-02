@@ -126,7 +126,8 @@ const EmployeeView = () => {
   // Filter employees based on the search query
   const filteredEmployees = employees.filter((employee) =>
     employee.e_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    employee.e_id.toString().includes(searchQuery)
+    employee.e_id.toString().includes(searchQuery) ||
+    employee.designation.toLowerCase().includes(searchQuery.toLowerCase()) // Include designation in the search
   );
 
   return (
@@ -137,7 +138,7 @@ const EmployeeView = () => {
 
       {/* Search Bar */}
       <Input
-        placeholder="Search by Employee ID or Name"
+        placeholder="Search by Employee ID, Name, or Designation"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         style={{ marginBottom: "16px", width: "300px" }}

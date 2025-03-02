@@ -15,4 +15,5 @@ urlpatterns = [
     path('assign-shifts/', assign_shifts_api, name='assign_shifts_api'),
     path("get-excel/", RetrieveExcelView.as_view(), name="get-excel"),
     path('employees/<int:employee_id>/', EmployeeSearchView.as_view(), name='employee-search'),
+    path('employeecsv/<int:employee_id>/', EmployeeCSVSearchView.as_view(), name='employee-search'),
 ]

@@ -44,5 +44,5 @@ urlpatterns = [
     path('swap/', include('swap.urls')),
     path("get-excel/", RetrieveExcelView.as_view()),
     path('employees/<int:employee_id>/', EmployeeSearchView.as_view()),
-
+    path('employeecsv/<int:employee_id>/', EmployeeCSVSearchView.as_view()),
 ]
